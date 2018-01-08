@@ -30,13 +30,12 @@ jobs:
 
       - run: lein deps
 
-      - run:
-          name: Build JS
-          command: lein cljsbuild once test
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "project.clj" }}
 
-      - run:
-          name: Run CLJS tests
-          command: lein doo once
+      - run: lein test
 
   deploy:
     <<: *defaults
