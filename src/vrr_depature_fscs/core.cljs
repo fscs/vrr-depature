@@ -5,6 +5,7 @@
       [cljs-http.client :as http]
       [cljs.core.async :refer [<! timeout]]))
 
+; defines the number of showed lines.
 (def no-lines 7)
 
 (defn depature-row [[line destination depature]]
@@ -15,9 +16,9 @@
 
 (defn depature-monitor [title url]
     (let [query-url (str url "?frontend=json&no_lines=6" no-lines)
-          state (r/atom {:data [["a" "1" "z"] ["b" "2" "y"] ["c" "3" "x"]]})
+          state (r/atom {:data []})
           refresh (fn [response]
-                    (reset! state {:data (take no-lines (get-in response [:body :preformatted]))}))]
+                    (reset! state {:data (get-in response [:body :preformatted])}))]
 
       (go-loop []
           (refresh (<! (http/get query-url {:with-credentials? false})))
